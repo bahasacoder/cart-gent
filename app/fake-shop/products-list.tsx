@@ -12,27 +12,18 @@ function ProductList() {
     const [products, setProducts] = useState([]);
     const dispatch = useDispatch();
      const { totalQuantity } = useSelector((state) => state.cart);
-    /*
-        effect
-        const fetchProducts = async () => {
-            axios.get('https://fakestoreapi.com/products')
-            .then(response => setProducts(response.data));
-        }
-        fetchProducts()
-    */
+    
     //const {items:products, status} = useSelector((state)=>state.products)
     //const dispatch = useDispatch();
        
-    useEffect(()=>{
-        const fetchProducts = async () => {
-            axios.get('https://fakestoreapi.com/products')
-            .then(response => setProducts(response.data));
-        }
-        fetchProducts()
-
-      
-        dispatch(fetchProducts);
-       
+    useEffect(()=>{   
+        
+          const fetchProduct = async () => {
+            const response = await axios.get('https://fakestoreapi.com/products');
+            return response.data;
+            // console.log(response.data);
+          }
+          fetchProduct().then(data => setProducts(data));
     },[])
     
     const handleAddToCart = (product) => {
