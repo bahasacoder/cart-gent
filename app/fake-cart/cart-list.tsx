@@ -1,7 +1,8 @@
 ///app/app/cart/page.js
 'use client';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; 
+import { store } from @/lib/store";
 import { removeFromCart, updateQuantity, clearCart } from '@/lib/features/cartSlice';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
