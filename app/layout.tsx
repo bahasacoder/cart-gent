@@ -10,7 +10,11 @@ export const metadata = {
   description: 'Modern shopping cart built with Next.js and Redux Toolkit',
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
       <body className={inter.className}>
