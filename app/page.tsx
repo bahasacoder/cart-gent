@@ -1,7 +1,7 @@
 // /app/app/page.js
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart } from '@/lib/features/cartSlice'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { ShoppingCart, Plus, Minus, Trash2, ShoppingBag, X } from 'lucide-react'
+import { useAppSelector, useAppDispatch, useAppStore } from '@/lib/hooks'
 
 const MOCK_PRODUCTS = [
   {
@@ -80,9 +81,13 @@ const MOCK_PRODUCTS = [
 ]
 
 export default function App() {
+   // Initialize the store with the product information
+  const store = useAppStore()
+  const initialized = useRef(false)
+  
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const dispatch = useDispatch()
-  const { items, totalQuantity, totalAmount } = useSelector((state: RootState) => state.cart)
+  const dispatch = useAppDispatch()
+  const { items, totalQuantity, totalAmount } = useAppSelector((state) => state.cart)
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product))
