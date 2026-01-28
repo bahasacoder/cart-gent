@@ -89,19 +89,19 @@ export default function App() {
   const dispatch = useAppDispatch()
   const { items, totalQuantity, totalAmount } = useAppSelector((state) => state.cart)
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: any) => {
     dispatch(addToCart(product))
   }
 
-  const handleRemoveFromCart = (id) => {
+  const handleRemoveFromCart = (id:any) => {
     dispatch(removeFromCart(id))
   }
 
-  const handleIncreaseQuantity = (id) => {
+  const handleIncreaseQuantity = (id: any) => {
     dispatch(increaseQuantity(id))
   }
 
-  const handleDecreaseQuantity = (id) => {
+  const handleDecreaseQuantity = (id: any) => {
     dispatch(decreaseQuantity(id))
   }
 
