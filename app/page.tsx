@@ -82,7 +82,7 @@ const MOCK_PRODUCTS = [
 export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const dispatch = useDispatch()
-  const { items, totalQuantity, totalAmount } = useSelector((state) => state.cart)
+  const { items, totalQuantity, totalAmount } = useSelector((state: RootState) => state.cart)
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product))
