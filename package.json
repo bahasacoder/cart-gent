@@ -13,8 +13,6 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "module",
-  "main": "index.js",
   "directories": {
     "lib": "lib"
   },
