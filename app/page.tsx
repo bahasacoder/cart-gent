@@ -90,7 +90,7 @@ const MOCK_PRODUCTS = [
   }
 ]
 
-export default function App() {
+export default function HomeApp() {
    // Initialize the store with the product information
   const store = useAppStore()
   const initialized = useRef(false)
