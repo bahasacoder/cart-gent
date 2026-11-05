@@ -1,0 +1,171 @@
+import React, { useState, useEffect } from 'react';
+import { ShoppingBag, Heart, Search, ChevronDown, Star, ArrowRight, Eye, RefreshCw, X, Menu } from 'lucide-react';
+
+// Mock Data untuk Produk
+const PRODUCTS = [
+  { id: 1, name: 'CyberSphere Over-Ear ANC', price: 299, image: 'https://unsplash.com', category: 'Audio', rating: 4.9 },
+  { id: 2, name: 'ChronoVibe Minimalist Watch', price: 189, image: 'https://unsplash.com', category: 'Aksesoris', rating: 4.7 },
+  { id: 3, name: 'LumorGlass Smart Glasses', price: 420, image: 'https://unsplash.com', category: 'Gadget', rating: 4.8 },
+  { id: 4, name: 'AeroStride Future Runner', price: 150, image: 'https://unsplash.com', category: 'Sepatu', rating: 4.6 },
+];
+
+export default function ModernEcommerceHome() {
+  const [scrollY, setScrollY] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
+  const [favorites, setFavorites] = useState<number[]>([]);
+  const [activeCategory, setActiveCategory] = useState('Semua');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [animatingId, setAnimatingId] = useState<number | null>(null);
+
+  // Efek Cinematic Parallax Tracker
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Micro-delight: Animasi Tambah ke Keranjang
+  const handleAddToCart = (id: number) => {
+    setAnimatingId(id);
+    setCartCount(prev => prev + 1);
+    setTimeout(() => setAnimatingId(null), 600); // Reset status animasi setelah 600ms
+  };
+
+  // Micro-delight: Toggle Favorit dengan Haptic-like Feel
+  const toggleFavorite = (id: number) => {
+    setFavorites(prev => prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0b0c10] text-gray-100 font-sans selection:bg-cyan-500 selection:text-black overflow-x-hidden">
+      
+      {/* 1. NAVIGATION BAR */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0b0c10]/80 backdrop-blur-md border-b border-gray-800 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2 group cursor-pointer">
+            <div className="w-10 h-10 bg-gradient-to-tr from-cyan-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
+              <ShoppingBag className="w-5 h-5 text-black" />
+            </div>
+            <span className="font-bold text-xl tracking-wider bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent group-hover:from-cyan-400 group-hover:to-fuchsia-400 transition-all duration-300">
+              NEXUS.<span className="text-cyan-400">LAB</span>
+            </span>
+          </div>
+
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-gray-400">
+            {['Beranda', 'Koleksi', 'Lab AI', 'Jurnal'].map((item) => (
+              <a key={item} href="#" className="hover:text-cyan-400 transition-colors duration-200 relative group py-2">
+                {item}
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button className="p-2 text-gray-400 hover:text-white rounded-full hover:bg-gray-900 transition-all duration-200">
+              <Search className="w-5 h-5" />
+            </button>
+            
+            {/* Keranjang dengan Micro-counter Badge */}
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="p-2 text-gray-400 hover:text-white rounded-full hover:bg-gray-900 relative transition-all duration-200 group"
+            >
+              <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-bounce">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* 2. CINEMATIC HERO SECTION (PARALLAX EFFECT) */}
+      <header className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image Bergerak Lebih Lambat Saat Di-scroll (Cinematic Feel) */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105"
+          style={{ 
+            backgroundImage: `url('https://unsplash.com')`,
+            transform: `translateY(${scrollY * 0.15}px)` 
+          }}
+        />
+        {/* Overlay Gradasi Gelap yang Sinematik */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0b0c10]/40 via-[#0b0c10]/70 to-[#0b0c10]" />
+
+        {/* Konten Hero */}
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto space-y-6 mt-16">
+          <span className="inline-block text-xs uppercase tracking-[0.4em] font-semibold text-cyan-400 bg-cyan-950/50 border border-cyan-800/50 px-4 py-2 rounded-full backdrop-blur-md animate-pulse">
+            Masa Depan Estetika Retail
+          </span>
+          <h1 className="text-5xl md:text-8xl font-extrabold tracking-tight leading-none text-white">
+            Desain Murni. <br />
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-500 bg-clip-text text-transparent">
+              Performa Tanpa Batas.
+            </span>
+          </h1>
+          <p className="text-gray-400 text-base md:text-xl max-w-xl mx-auto font-light leading-relaxed">
+            Kurasi perangkat premium dengan ekosistem pintar, dirancang khusus untuk meningkatkan produktivitas digital harian Anda.
+          </p>
+          <div className="pt-6 flex justify-center gap-4">
+            <button className="group px-8 py-4 bg-white text-black font-semibold rounded-full shadow-2xl hover:bg-cyan-400 transition-all duration-300 flex items-center gap-2 hover:gap-4 overflow-hidden relative">
+              <span>Jelajahi Lab</span>
+              <ArrowRight className="w-4 h-4 transition-all duration-300" />
+            </button>
+          </div>
+        </div>
+
+        {/* Indikator Scroll Bawah */}
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-70 animate-bounce">
+          <span className="text-[10px] tracking-[0.3em] uppercase text-gray-500">Scroll ke bawah</span>
+          <ChevronDown className="w-4 h-4 text-cyan-400" />
+        </div>
+      </header>
+
+      {/* 3. ETALASE PRODUK UTAMA */}
+      <main className="max-w-7xl mx-auto px-6 py-24 space-y-16">
+        
+        {/* Header Bagian Etalase & Filter */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-800 pb-8">
+          <div>
+            <span className="text-xs text-cyan-400 tracking-widest font-bold uppercase block mb-2">// KATALOG UNGGULAN</span>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">Produk Lab Terkini.</h2>
+          </div>
+          {/* Micro-delight Filter Tabs */}
+          <div className="flex gap-2 p-1 bg-gray-900/60 border border-gray-800 rounded-full backdrop-blur-sm self-start md:self-auto">
+            {['Semua', 'Audio', 'Gadget', 'Aksesoris'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-5 py-2 text-xs font-semibold rounded-full transition-all duration-300 ${
+                  activeCategory === cat 
+                    ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/20' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Grid Produk */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {PRODUCTS.filter(p => activeCategory === 'Semua' || p.category === activeCategory).map((product) => (
+            <div 
+              key={product.id} 
+              className="group bg-gradient-to-b from-gray-900/50 to-gray-950/50 border border-gray-800/80 rounded-3xl overflow-hidden hover:border-cyan-500/40 transition-all duration-500 flex flex-col h-full relative"
+            >
+              {/* Image & Quick Action Overlay */}
+              <div className="relative aspect-square overflow-hidden bg-gray-950">
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out" 
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+                  {/* Micro-delight: Quick view & favorite hover effects */}
+                  <button className="p-3 bg-white text-black rounded-full hover:bg-cyan-400 hover:scale-110 active:scale-95 transition-all duration-200 shadow-xl">
+                    <Eye className="w-4 h-4" />
+                  </button>
