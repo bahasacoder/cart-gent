@@ -192,5 +192,46 @@ export default function ModernEcommerceHome() {
           </div>
           
           {/* Tab Filter */}
-          <div className={`flex gap-1 p-1 rounded-full border backdrop-blur-sm ${isDarkMode ? 'bg-gray-900/60 border-gray-800' : 'bg-gray-200/60 border-gray-300'}`}>
+         <div className="flex gap-2 p-1 bg-gray-900/60 border border-gray-800 rounded-full backdrop-blur-sm self-start md:self-auto">
             {['Semua', 'Audio', 'Gadget', 'Aksesoris'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-5 py-2 text-xs font-semibold rounded-full transition-all duration-300 ${
+                  activeCategory === cat 
+                    ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/20' 
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+         {/* Grid Produk */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {PRODUCTS.filter(p => activeCategory === 'Semua' || p.category === activeCategory).map((product) => (
+            <div 
+              key={product.id} 
+              className="group bg-gradient-to-b from-gray-900/50 to-gray-950/50 border border-gray-800/80 rounded-3xl overflow-hidden hover:border-cyan-500/40 transition-all duration-500 flex flex-col h-full relative"
+            >
+              {/* Image & Quick Action Overlay */}
+              <div className="relative aspect-square overflow-hidden bg-gray-950">
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out" 
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+                  {/* Micro-delight: Quick view & favorite hover effects */}
+                  <button className="p-3 bg-white text-black rounded-full hover:bg-cyan-400 hover:scale-110 active:scale-95 transition-all duration-200 shadow-xl">
+                    <Eye className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  )}
