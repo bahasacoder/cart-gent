@@ -13,7 +13,7 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
