@@ -1,6 +1,6 @@
 import Image from "next/image";
-import nextSvg from "../public/next.svg"; 
-import vercelSvg from "../public/vercel.svg"
+import nextSvg from "../../public/next.svg"; 
+import vercelSvg from "../../public/vercel.svg"
 
 export default function Home() {
   return (
