@@ -1,0 +1,196 @@
+"use client"
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShoppingBag, Heart, Search, ChevronDown, Star, ArrowRight, Eye, RefreshCw, X, Sun, Moon } from 'lucide-react';
+
+// Mock Data untuk Produk
+const PRODUCTS = [
+  { id: 1, name: 'CyberSphere Over-Ear ANC', price: 299, image: 'https://unsplash.com', category: 'Audio', rating: 4.9 },
+  { id: 2, name: 'ChronoVibe Minimalist Watch', price: 189, image: 'https://unsplash.com', category: 'Aksesoris', rating: 4.7 },
+  { id: 3, name: 'LumorGlass Smart Glasses', price: 420, image: 'https://unsplash.com', category: 'Gadget', rating: 4.8 },
+  { id: 4, name: 'AeroStride Future Runner', price: 150, image: 'https://unsplash.com', category: 'Sepatu', rating: 4.6 },
+];
+
+export default function ModernEcommerceHome() {
+  const [scrollY, setScrollY] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
+  const [favorites, setFavorites] = useState<number[]>([]);
+  const [activeCategory, setActiveCategory] = useState('Semua');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [animatingId, setAnimatingId] = useState<number | null>(null);
+  
+  // Fitur Baru: State untuk Mode Gelap / Terang
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  // Efek Parallax Scroll Tracker
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleAddToCart = (id: number) => {
+    setAnimatingId(id);
+    setCartCount(prev => prev + 1);
+    setTimeout(() => setAnimatingId(null), 800);
+  };
+
+  const toggleFavorite = (id: number) => {
+    setFavorites(prev => prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]);
+  };
+
+  // Varian Animasi untuk Konten Staggered (Berurutan)
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 60 } }
+  };
+
+  return (
+    <div className={`min-h-screen font-sans selection:bg-cyan-500 selection:text-black overflow-x-hidden transition-colors duration-700 ${
+      isDarkMode ? 'bg-[#0b0c10] text-gray-100' : 'bg-gray-50 text-gray-900'
+    }`}>
+      
+      {/* 1. NAVIGATION BAR */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors duration-500 ${
+        isDarkMode ? 'bg-[#0b0c10]/80 border-gray-800' : 'bg-white/80 border-gray-200'
+      }`}>
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="flex items-center gap-2 group cursor-pointer"
+          >
+            <motion.div 
+              whileHover={{ rotate: 12 }}
+              className="w-10 h-10 bg-gradient-to-tr from-cyan-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg"
+            >
+              <ShoppingBag className="w-5 h-5 text-black" />
+            </motion.div>
+            <span className={`font-bold text-xl tracking-wider transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              NEXUS.<span className="text-cyan-500">LAB</span>
+            </span>
+          </motion.div>
+
+          <div className={`hidden md:flex items-center gap-8 text-sm font-medium tracking-wide ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            {['Beranda', 'Koleksi', 'Lab AI', 'Jurnal'].map((item) => (
+              <a key={item} href="#" className="hover:text-cyan-500 transition-colors duration-200 relative group py-2">
+                {item}
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-cyan-500 transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Micro-delight: Tombol Toggle Mode Terang/Gelap */}
+            <motion.button 
+              whileTap={{ scale: 0.85, rotate: 45 }}
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`p-2.5 rounded-full transition-colors ${isDarkMode ? 'text-amber-400 hover:bg-gray-900' : 'text-indigo-600 hover:bg-gray-200'}`}
+              aria-label="Toggle Theme"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={isDarkMode ? 'dark' : 'light'}
+                  initial={{ y: -10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 10, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </motion.div>
+              </AnimatePresence>
+            </motion.button>
+
+            <button className={`p-2 rounded-full transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-900' : 'text-gray-600 hover:text-black hover:bg-gray-200'}`}>
+              <Search className="w-5 h-5" />
+            </button>
+            
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className={`p-2 rounded-full relative transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-900' : 'text-gray-600 hover:text-black hover:bg-gray-200'}`}
+            >
+              <ShoppingBag className="w-5 h-5" />
+              <AnimatePresence>
+                {cartCount > 0 && (
+                  <motion.span 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -top-1 -right-1 bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* 2. CINEMATIC HERO SECTION */}
+      <header className="relative h-screen flex items-center justify-center overflow-hidden">
+        <motion.div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed transform scale-105"
+          style={{ 
+            backgroundImage: `url('https://unsplash.com')`,
+            y: scrollY * 0.2
+          }}
+        />
+        <div className={`absolute inset-0 transition-colors duration-700 ${
+          isDarkMode ? 'bg-gradient-to-b from-[#0b0c10]/40 via-[#0b0c10]/70 to-[#0b0c10]' : 'bg-gradient-to-b from-white/10 via-white/60 to-gray-50'
+        }`} />
+
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto space-y-6 mt-16"
+        >
+          <span className={`inline-block text-xs uppercase tracking-[0.4em] font-semibold px-4 py-2 rounded-full border backdrop-blur-md ${
+            isDarkMode ? 'text-cyan-400 bg-cyan-950/40 border-cyan-800/50' : 'text-cyan-700 bg-cyan-50/60 border-cyan-200'
+          }`}>
+            Masa Depan Estetika Retail
+          </span>
+          <h1 className={`text-5xl md:text-8xl font-extrabold tracking-tight leading-none ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            Desain Murni. <br />
+            <span className="bg-gradient-to-r from-cyan-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
+              Performa Eksklusif.
+            </span>
+          </h1>
+          <p className={`text-base md:text-xl max-w-xl mx-auto font-light leading-relaxed ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Kurasi perangkat premium dengan ekosistem pintar, dirancang khusus untuk meningkatkan produktivitas digital harian Anda.
+          </p>
+          <div className="pt-6 flex justify-center">
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className={`group px-8 py-4 font-semibold rounded-full shadow-2xl flex items-center gap-3 transition-colors ${
+                isDarkMode ? 'bg-white text-black hover:bg-cyan-400' : 'bg-black text-white hover:bg-cyan-600'
+              }`}
+            >
+              <span>Jelajahi Lab</span>
+              <ArrowRight className="w-4 h-4" />
+            </motion.button>
+          </div>
+        </motion.div>
+      </header>
+
+      {/* 3. ETALASE PRODUK UTAMA */}
+      <main className="max-w-7xl mx-auto px-6 py-24 space-y-16">
+        
+        <div className={`flex flex-col md:flex-row md:items-end justify-between gap-6 border-b pb-8 ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+          <div>
+            <span className="text-xs text-cyan-500 tracking-widest font-bold uppercase block mb-2">// KATALOG UNGGULAN</span>
+            <h2 className={`text-3xl md:text-5xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Produk Lab Terkini.</h2>
+          </div>
+          
+          {/* Tab Filter */}
+          <div className={`flex gap-1 p-1 rounded-full border backdrop-blur-sm ${isDarkMode ? 'bg-gray-900/60 border-gray-800' : 'bg-gray-200/60 border-gray-300'}`}>
+            {['Semua', 'Audio', 'Gadget', 'Aksesoris'].map((cat) => (
