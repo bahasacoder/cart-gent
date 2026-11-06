@@ -1,7 +1,7 @@
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import type { AppDispatch, AppStore, RootState } from './store'
 
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
-export const useAppSelector = useSelector.withTypes<RootState>()
-export const useAppStore = useStore.withTypes<AppStore>()
+// Gunakan custom hooks ini di seluruh komponen client Anda untuk menjamin type-safety
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector = <TSelected>(selector: (state: RootState) => TSelected) => useSelector(selector)
+export const useAppStore = () => useStore<AppStore>()
