@@ -24,7 +24,7 @@ import { cartActions } from "@/lib/features/cartSlice";
 
 // Definisi Tipe Data TypeScript
 interface CartItem {
-  id: string;
+  id: string | number;
   name: string;
   price: number;
   image: string;
@@ -129,15 +129,15 @@ const handleAddToCart = (product: Product) => {
   dispatch(cartActions.addItemToCart(product));
 };
 
-const handleRemoveFromCart = (id: string) => {
+const handleRemoveFromCart = (id: string | number) => {
   dispatch(cartActions.removeItemFromCart(id));
 };
 
-const handleIncreaseQuantity = (id: string) => {
+const handleIncreaseQuantity = (id: string | number) => {
   dispatch(cartActions.increaseQuantity(id));
 };
 
-const handleDecreaseQuantity = (id: string) => {
+const handleDecreaseQuantity = (id: string | number) => {
   dispatch(cartActions.decreaseQuantity(id));
 };
 
@@ -286,7 +286,7 @@ const handleClearCart = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {MOCK_PRODUCTS.map((product) => {
-            const cartItem = items.find((item: CartItem) => item.id === product.id)
+            const cartItem = items.find((item) => item.id === product.id)
             const isInCart = !!cartItem
 
             return (
